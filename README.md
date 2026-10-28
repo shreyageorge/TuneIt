@@ -13,6 +13,14 @@ A small Django + Python DSA project with a Spotify-inspired interface. The main 
 8. Run: `python manage.py runserver`
 9. Open http://127.0.0.1:8000/ in your browser.
 
+## Deploy to Vercel
+1. Import `https://github.com/shreyageorge/TuneIt` into Vercel and set the project root to the repository root (the folder containing `manage.py`).
+2. Before deploying, add these environment variables in **Project Settings → Environment Variables** for Production (and Preview if desired): `DJANGO_SECRET_KEY` (generate one locally with `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`), `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, and `MYSQL_PORT`. Never commit these values. `DJANGO_DEBUG` should be unset or set to `0`. If using a custom domain, add it to `DJANGO_ALLOWED_HOSTS` as a comma-separated host list.
+3. Deploy. Vercel runs `collectstatic` during the build and serves the Django WSGI application from `api/index.py`; WhiteNoise serves the collected static files.
+4. Initialize the hosted MySQL database once from a terminal with the same `MYSQL_*` variables set: run `python manage.py migrate --run-syncdb`, then `python manage.py shell -c "from music.seed import seed; seed()"`. Ensure the database host accepts connections from Vercel and configure any provider-required TLS settings.
+
+Vercel's function filesystem is not persistent, so do not use the default SQLite database for a deployed app. Use a hosted MySQL instance for song and playlist data. Vercel does not run Django migrations automatically; run the initialization commands above whenever deploying schema changes.
+
 ## Switch to MySQL
 Install MySQL Server, create a database named `tuneit`, then run `pip install mysqlclient` (Windows may require a compatible build environment). Set environment variables `MYSQL_DATABASE=tuneit`, `MYSQL_USER`, `MYSQL_PASSWORD`, and optionally `MYSQL_HOST`, `MYSQL_PORT`. Run `python manage.py migrate --run-syncdb` and the seed command again. Django selects MySQL whenever `MYSQL_DATABASE` is set. SQLite is provided only to make initial testing easier.
 
