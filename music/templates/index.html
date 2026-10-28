@@ -1,0 +1,128 @@
+<!-- Load Django static files tag library -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Set character encoding to UTF-8 -->
+    <meta charset="utf-8">
+    <!-- Ensure responsive scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Page title shown in browser tab -->
+    <title>TuneIt — Music Library</title>
+    <!-- Link to external stylesheet using Django static template tag -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <!-- Hidden form to include Django CSRF token for secure AJAX requests -->
+    <form style="display:none">{% csrf_token %}</form>
+
+    <!-- Main application container wrapper -->
+    <div class="app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <!-- Brand logo icon and text -->
+            <div class="brand">
+                <span class="brand-icon">◉</span> TuneIt
+            </div>
+            
+            <!-- Main navigation links -->
+            <nav>
+                <button class="nav active" data-view="home">⌂ &nbsp; Home</button>
+                <button class="nav" data-view="search">⌕ &nbsp; Search</button>
+                <button class="nav" data-view="library">▤ &nbsp; Your Library</button>
+                <button class="nav" data-view="dsa">⌘ &nbsp; DSA Operations</button>
+            </nav>
+
+            <!-- User playlists section header with add button -->
+            <div class="side-head">
+                YOUR PLAYLISTS 
+                <button id="newPlaylist" title="New playlist">＋</button>
+            </div>
+            
+            <!-- Dynamic container where playlist navigation items are injected -->
+            <div id="playlistNav"></div>
+            
+            <!-- Sidebar footer text highlighting project details -->
+            <div class="side-note">
+                DSA Mini Project · BST · Binary Search · Merge Sort
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main">
+            <!-- Top bar header with dynamic view name and action buttons -->
+            <header class="topbar">
+                <span id="viewName">Good evening</span>
+                <div class="top-actions">
+                    <span class="chip" id="songCount">27 songs</span>
+                    <button class="pill" id="addSongBtn">＋ Add Song</button>
+                </div>
+            </header>
+            
+            <!-- Dynamic content view container -->
+            <section id="content" class="content"></section>
+        </main>
+
+        <!-- Music Player Footer -->
+        <footer class="player">
+            <!-- Currently playing song cover and metadata info -->
+            <div class="now">
+                <div class="mini-cover">♫</div>
+                <div>
+                    <strong id="currentTitle">Choose a song</strong>
+                    <small id="currentArtist">TuneIt Music Library</small>
+                </div>
+            </div>
+
+            <!-- Central playback controls and progress bar -->
+            <div class="play-center">
+                <!-- Playback control buttons -->
+                <div class="play-controls">
+                    <button id="prev" title="Previous">⏮</button>
+                    <button id="play" class="play-circle" title="Play / pause">▶</button>
+                    <button id="next" title="Next">⏭</button>
+                </div>
+                <!-- Track time and seek range slider -->
+                <div class="progress">
+                    <span id="elapsed">0:00</span>
+                    <input id="seek" type="range" min="0" max="100" value="0">
+                    <span id="total">0:00</span>
+                </div>
+            </div>
+
+            <!-- Audio volume slider control -->
+            <div class="volume">
+                ♪ <input id="volume" type="range" min="0" max="100" value="70">
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden audio element for handling music playback -->
+    <audio id="audio"></audio>
+
+    <!-- Modal dialog wrapper for embedded YouTube music videos -->
+    <dialog id="youtubeDialog" class="youtube-dialog">
+        <!-- Dialog header with title and close button -->
+        <div class="youtube-dialog-head">
+            <strong id="youtubeTitle"></strong>
+            <button id="closeYoutube" type="button" aria-label="Close video">×</button>
+        </div>
+        <!-- Iframe container for YouTube playback -->
+        <iframe 
+            id="youtubeFrame" 
+            title="YouTube music video" 
+            allow="autoplay; encrypted-media; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+        </iframe>
+        <!-- Informational disclaimer text -->
+        <p>Playback is provided by YouTube. Some videos may not allow embedding.</p>
+    </dialog>
+
+    <!-- Toast notification element for status updates -->
+    <div id="toast" role="status"></div>
+
+    <!-- Load main JavaScript file via Django static template tag -->
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
