@@ -22,7 +22,7 @@ A small Django + Python DSA project with a Spotify-inspired interface. The main 
 Vercel's function filesystem is not persistent, so do not use the default SQLite database for a deployed app. Use a hosted MySQL instance for song and playlist data. Vercel does not run Django migrations automatically; run the initialization commands above whenever deploying schema changes.
 
 ## Switch to MySQL
-Install MySQL Server, create a database named `tuneit`, then run `pip install mysqlclient` (Windows may require a compatible build environment). Set environment variables `MYSQL_DATABASE=tuneit`, `MYSQL_USER`, `MYSQL_PASSWORD`, and optionally `MYSQL_HOST`, `MYSQL_PORT`. Run `python manage.py migrate --run-syncdb` and the seed command again. Django selects MySQL whenever `MYSQL_DATABASE` is set. SQLite is provided only to make initial testing easier.
+Install MySQL Server, create a database named `tuneit`, then install the packages from `requirements.txt`. The project uses PyMySQL as its pure-Python MySQL driver, avoiding a native extension build. Set environment variables `MYSQL_DATABASE=tuneit`, `MYSQL_USER`, `MYSQL_PASSWORD`, and optionally `MYSQL_HOST`, `MYSQL_PORT`. Run `python manage.py migrate --run-syncdb` and the seed command again. Django selects MySQL whenever `MYSQL_DATABASE` is set. SQLite is provided only to make initial testing easier.
 
 ## What is stored where?
 - `Song`: one record per song (title unique, artist, duration in seconds, optional playable audio/YouTube and cover URLs).
