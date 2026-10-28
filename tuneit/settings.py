@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()
 
 #Base dir finds proj dir 
 BASE_DIR = Path(__file__).resolve().parent.parent 
